@@ -1462,6 +1462,7 @@ name = "social-credit"
 version = "0.1.0"
 dependencies = [
  "futures",
+ "http",
  "mongodb",
  "serde",
  "serde_json",

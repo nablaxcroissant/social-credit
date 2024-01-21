@@ -4,6 +4,7 @@ version = "0.1.0"
 edition = "2021"
 
 [dependencies]
+http = "0.2.0"
 tokio = { version = "1", features = ["macros"] }
 serde_json = { version = "1", features = ["raw_value"] }
 serde = { version = "1.0", features = ["derive"] }
@@ -28,6 +29,10 @@ path = "api/init.rs"
 [[bin]]
 name = "get_scores"
 path = "api/get_scores.rs"
+
+[[bin]]
+name = "report"
+path = "api/report.rs"
 
 [[bin]]
 name = "main"

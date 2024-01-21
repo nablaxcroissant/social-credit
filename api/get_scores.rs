@@ -1,6 +1,7 @@
 use social_credit::Person;
 use futures::stream::TryStreamExt;
 
+// use http::Method;
 use serde_json::json;
 use vercel_runtime::{run, Body, Error, Request, Response, StatusCode};
 use mongodb::{ 
@@ -12,10 +13,11 @@ use mongodb::{
 
 #[tokio::main]
 async fn main() -> Result<(), Error> {
-    run(init).await
+    run(get_scores).await
 }
 
-pub async fn init(_req: Request) -> Result<Response<Body>, Error> {
+pub async fn get_scores(_req: Request) -> Result<Response<Body>, Error> {
+    
     let uri = "mongodb+srv://lauercarson:X5mh2OCR9ZCKLc9w@cluster0.vp7unzw.mongodb.net/?retryWrites=true&w=majority";
     // Create a new client and connect to the server
     let client = Client::with_uri_str(uri).await?;
@@ -36,12 +38,22 @@ pub async fn init(_req: Request) -> Result<Response<Body>, Error> {
         people.push(person);
     }
 
+    let mut html = String::new();
+
+    for person in people.iter(){
+        html.push_str(&format!("<tr>
+        <td>{}</td>
+        <td>{}</td>
+        <td>{}</td>
+        </tr>", person.first_name, person.last_name, person.score));
+    }
+
     Ok(Response::builder()
         .status(StatusCode::OK)
         .header("Content-Type", "application/json")
         .body(
             json!({
-              "people": people
+                "people": people
             })
             .to_string()
             .into(),

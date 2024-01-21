@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<head>
+    <script src="https://unpkg.com/htmx.org@1.9.10"></script>
+</head>
+<body>
+    <h2>
+        Social Credit Scores
+    </h2>
+    <table>
+        <div hx-get="http://localhost:3000/api/get_scores" hx-trigger="load" hx-swap="innerHTML">
+            [Here Mouse, Mouse!]
+        </div>
+    </table>
+    <h2>Report comrade for good or bad behavior</h2>
+    <form hx-post="http://localhost:3000/api/report" hx-trigger="form">
+        <label for="first_name">First Name</label>
+        <input type="text" id="first_name" name="first_name">
+        <br>
+
+        <label for="last_name">Last Name</label>
+        <input type="text" id="last_name" name="last_name">
+        <br>
+    
+        <label for="update">Points to add or take away</label>
+        <input type="number" id="update" name="update">
+        <br>
+
+        <label for="reason">Reason</label>
+        <input type="text" id="reason" name="reason">
+    
+        <button>Submit!</button>
+    </form>
+</body>
