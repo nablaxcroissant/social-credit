@@ -1,9 +1,13 @@
+use social_credit::Person;
+use futures::stream::TryStreamExt;
+
 use serde_json::json;
 use vercel_runtime::{run, Body, Error, Request, Response, StatusCode};
 use mongodb::{ 
-	bson::{Document, doc},
+	bson::doc,
 	Client,
-	Collection 
+	Collection,
+    options::FindOptions,
 };
 
 #[tokio::main]
@@ -16,19 +20,28 @@ pub async fn init(_req: Request) -> Result<Response<Body>, Error> {
     // Create a new client and connect to the server
     let client = Client::with_uri_str(uri).await?;
     // Get a handle on the movies collection
-    let database = client.database("sample_mflix");
-    let my_coll: Collection<Document> = database.collection("movies");
-    // Find a movie based on the title value
-    let my_movie = my_coll.find_one(doc! { "title": "The Perils of Pauline" }, None).await?;
-    // Print the document
-    println!("Found a movie:\n{:#?}", my_movie);
+    let database = client.database("registry");
+    let people: Collection<Person> = database.collection("people");
+    
+    let opts: FindOptions = FindOptions::builder()
+        .sort(doc! { "score": 1 })
+        .build();
+
+    let filter = doc! {};
+    let mut cursor = people.find(filter, opts).await?;
+
+    let mut people = Vec::new();
+
+    while let Some(person) = cursor.try_next().await? {
+        people.push(person);
+    }
 
     Ok(Response::builder()
         .status(StatusCode::OK)
         .header("Content-Type", "application/json")
         .body(
             json!({
-              "message": "Yessir"
+              "people": people
             })
             .to_string()
             .into(),
