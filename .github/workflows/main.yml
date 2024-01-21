@@ -21,6 +21,7 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
+  run: cd frontend/social-credit-ui
   # Single deploy job since we're just deploying
   deploy:
     environment:
