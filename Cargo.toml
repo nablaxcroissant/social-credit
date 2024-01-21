@@ -4,17 +4,16 @@ version = "0.1.0"
 edition = "2021"
 
 [dependencies]
-openssl = "0.10.41"
-postgres-openssl = "0.5.0"
-chrono = "0.4.22"
-actix-web = "4"
+tokio = { version = "1", features = ["macros"] }
+serde_json = { version = "1", features = ["raw_value"] }
+# Documentation: https://docs.rs/vercel_runtime/latest/vercel_runtime
+vercel_runtime = { version = "1.1.0" }
 
-[dependencies.postgres]
-version = "0.19.3"
-features = [
-    "with-uuid-1"
-]
+# You can specify a library for shared logic here (optional)
+# [lib]
+# path = "src-rs/lib.rs"
 
-[dependencies.uuid]
-version = "1.1.2"
-
+# Each handler has to be specified as [[bin]]
+[[bin]]
+name = "init"
+path = "api/init.rs"
