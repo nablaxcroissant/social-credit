@@ -21,7 +21,6 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  run: cd frontend/social-credit-ui
   # Single deploy job since we're just deploying
   deploy:
     environment:
@@ -36,6 +35,8 @@ jobs:
         with:
           node-version: 18
           cache: 'npm'
+      - name: Move to Working Directory
+        run: cd frontend/social-credit-ui
       - name: Install dependencies
         run: npm install
       - name: Build
